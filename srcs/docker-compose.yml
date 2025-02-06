@@ -1,0 +1,25 @@
+services:
+  mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb
+    restart: always
+    env_file:
+      - ./.env
+    networks:
+      - inception
+  wordress:
+    container_name: wordress
+    build: ./requirements/wordress
+    restart: always
+    env_file:
+      - ./.env
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+networks:
+  inception:
+
+volumes:
+  # TODO: bind the volumes to /home/obenchkr
+  database:
