@@ -3,9 +3,14 @@
 # set -e
 
 # TODO: remove this Trash!!
-sleep 10
 
-if ! wp core is-installed --path=/var/www/wordpress > /dev/null 2>&1 ; then
+until mysqladmin ping -h $MYSQL_HOST -u $MYSQL_USERNAME -p$MYSQL_PASSWORD --silent; do
+    echo "=> Waiting for MariaDB to be ready..."
+    sleep 1
+done
+
+if ! wp core is-installed --path=/var/www/wordpress > /dev/null 2>&1 ;
+then
     wp core download --path=/var/www/wordpress
     cd /var/www/wordpress
     wp config create --dbname=$MYSQL_DATABASE --dbuser=$MYSQL_USERNAME --dbpass=$MYSQL_PASSWORD --dbhost=$MYSQL_HOST

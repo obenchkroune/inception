@@ -5,9 +5,15 @@ set -e
 function init() {
     mkdir -p /var/lib/mysql/data
     chown -R mysql:mysql /var/lib/mysql
+    chmod 755 -R /var/lib/mysql
     mariadb-install-db
 
-    mariadbd&
+    mariadbd --skip-grant-tables --skip-networking&
+
+    until mysqladmin ping --silent; do
+        echo "=> Waiting for mariadb to stop..."
+        sleep 1
+    done
 
 mysql <<-EOF
     ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
@@ -23,12 +29,17 @@ mysql <<-EOF
 
     FLUSH PRIVILEGES;
 EOF
+    
+    echo "=> Shutting Down Mariadb"
 
     killall -TERM mariadbd
+    wait $(pidof mariadbd)
 }
 
 if [ ! -d /var/lib/mysql/data ]; then
     init
 fi
 
-exec mysqld --skip-grant-tables
+echo "=> Starting the mariadb server"
+
+exec mariadbd

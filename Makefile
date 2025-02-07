@@ -14,6 +14,6 @@ clean: down
 	docker builder prune -f
 
 fclean:
-	docker system prune -a --volumes
+	docker system prune -a --volumes -f
 
 .PHONY: up down clean fclean
