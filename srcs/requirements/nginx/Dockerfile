@@ -2,9 +2,11 @@ FROM debian:bullseye
 
 RUN apt update && apt install -y nginx
 
-COPY ./tools/nginx-entrypoint.sh /usr/local/bin/
+COPY ./tools/nginx-entrypoint.sh /usr/local/bin/nginx-entrypoint.sh
 
-# TODO: implement the nginx image requirements
+RUN chmod +x /usr/local/bin/nginx-entrypoint.sh
+
+COPY ./conf/default.conf /etc/nginx/sites-available/default
 
 ENTRYPOINT [ "nginx-entrypoint.sh" ]
 
