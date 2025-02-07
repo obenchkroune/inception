@@ -29,4 +29,4 @@ EOF
 kill $(cat /run/mysqld/mysqld.pid)
 wait $(cat /run/mysqld/mysqld.pid)
 
-exec $@
+exec "$@"

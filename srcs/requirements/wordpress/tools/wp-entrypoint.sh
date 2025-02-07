@@ -14,4 +14,4 @@ then
     wp --allow-root plugin update --all
 fi
 
-exec $@
+exec "$@"
