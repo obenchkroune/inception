@@ -2,14 +2,10 @@
 
 set -e
 
-mkdir -p /run/mysqld
-chown -R mysql /run/mysqld/
-chown -R mysql /var/lib/mysql
-
 mariadbd --skip-networking &
 
 until mariadb-admin -u root -p$DB_ROOT_PASSWORD ping --silent; do
-    echo ">>>> Waiting for MariaDB to start..."
+    echo ">>> Waiting for MariaDB to start..."
     sleep 1
 done
 
@@ -33,4 +29,4 @@ EOF
 kill $(cat /run/mysqld/mysqld.pid)
 wait $(cat /run/mysqld/mysqld.pid)
 
-exec mariadbd --bind-address=0.0.0.0
+exec $@

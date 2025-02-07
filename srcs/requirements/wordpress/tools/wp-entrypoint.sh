@@ -1,7 +1,7 @@
 #! /bin/bash
 
 until mariadb-admin ping -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD --silent; do
-    echo "=> Waiting for MariaDB to be ready..."
+    echo ">>> Waiting for MariaDB to be ready..."
     sleep 1
 done
 
@@ -14,4 +14,4 @@ then
     wp --allow-root plugin update --all
 fi
 
-exec php-fpm7.4 -F -R
+exec $@
