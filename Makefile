@@ -1,10 +1,10 @@
 DCFLAGS	:=	-f ./srcs/docker-compose.yml
 
 up:
-	docker-compose $(DCFLAGS) --build -d up
+	docker compose $(DCFLAGS) up --build -d
 
 down:
-	docker-compose $(DCFLAGS) down
+	docker compose $(DCFLAGS) down
 
 clean: down
 	docker rm $(shell docker ps -aq)
@@ -13,7 +13,7 @@ clean: down
 	docker volume prune -f
 	docker builder prune -f
 
-# fclean:
-# 	docker system prune -a --volumes
+fclean:
+	docker system prune -a --volumes
 
-.PHONY: up down clean # fclean
+.PHONY: up down clean fclean

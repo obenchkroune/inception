@@ -1,4 +1,18 @@
 services:
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    restart: always
+    env_file:
+      - ./.env
+    networks:
+      - inception
+    ports:
+      - "443:443"
+    volumes:
+      - web:/var/www:ro
+    depends_on:
+      - wordpress
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb
@@ -7,9 +21,11 @@ services:
       - ./.env
     networks:
       - inception
-  wordress:
-    container_name: wordress
-    build: ./requirements/wordress
+    volumes:
+      - db:/var/lib/mysql:rw
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress
     restart: always
     env_file:
       - ./.env
@@ -17,9 +33,12 @@ services:
       - inception
     depends_on:
       - mariadb
+    volumes:
+      - web:/var/www:rw
 networks:
   inception:
 
 volumes:
   # TODO: bind the volumes to /home/obenchkr
-  database:
+  db:
+  web:
