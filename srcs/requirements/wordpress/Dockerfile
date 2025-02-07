@@ -1,6 +1,6 @@
-FROM alpine:3.20
+FROM debian:bullseye
 
-RUN apk update && apk add --no-cache curl php-fpm php php-phar php-curl php-mysqli php-pdo php-mbstring mariadb-client
+RUN apt update && apt -y install curl php-fpm php mariadb-client php-mysqli php-mbstring php-pdo php-curl
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \ 
     chmod +x wp-cli.phar && \ 
@@ -10,6 +10,6 @@ COPY ./tools/wp-entrypoint.sh /usr/local/bin/wp-entrypoint.sh
 
 RUN chmod +x /usr/local/bin/wp-entrypoint.sh
 
-VOLUME [ "/var/www" ]
+VOLUME [ "/var/www/wordpress" ]
 
 ENTRYPOINT [ "wp-entrypoint.sh" ]

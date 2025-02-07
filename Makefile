@@ -7,13 +7,11 @@ down:
 	docker compose $(DCFLAGS) down
 
 clean: down
-	docker rm $(shell docker ps -aq)
-	docker rmi $(shell docker images -aq)
-	docker network prune -f
-	docker volume prune -f
-	docker builder prune -f
+	docker stop $(shell docker ps -qa); docker rm $(shell docker ps -qa); docker rmi -f $(shell docker images -qa); docker volume rm $(shell docker volume ls -q); docker network rm $(shell docker network ls -q) 2>/dev/null
 
-fclean:
-	docker system prune -a --volumes -f
+fclean: clean
+	for i in $(shell docker volume ls -q); do docker volume rm "$i"; done;
 
-.PHONY: up down clean fclean
+re: fclean up
+
+.PHONY: up down clean fclean re

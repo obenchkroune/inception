@@ -10,7 +10,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - web:/var/www:ro
+      - web:/var/www/wordpress:ro
     depends_on:
       - wordpress
   mariadb:
@@ -34,7 +34,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - web:/var/www:rw
+      - web:/var/www/wordpress:rw
 networks:
   inception:
 

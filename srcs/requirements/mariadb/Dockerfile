@@ -1,12 +1,13 @@
-FROM alpine:3.20
+FROM debian:bullseye
 
-RUN apk update && apk add --no-cache mariadb mariadb-client mariadb-server-utils
+RUN apt update && apt install -y mariadb-server mariadb-client
 
-COPY conf/mariadb-server.cnf /etc/my.cnf.d/
-COPY ./tools/mariadb-entrypoint.sh /usr/bin/mariadb-entrypoint.sh
+COPY ./tools/mariadb-entrypoint.sh /usr/local/bin/mariadb-entrypoint.sh
 
-RUN chmod +x /usr/bin/mariadb-entrypoint.sh
+RUN chmod +x /usr/local/bin/mariadb-entrypoint.sh
 
 VOLUME [ "/var/lib/mysql" ]
 
 ENTRYPOINT [ "mariadb-entrypoint.sh" ]
+
+CMD [ "mariadbd", "--bind-address=0.0.0.0" ]

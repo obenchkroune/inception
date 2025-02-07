@@ -1,45 +1,36 @@
-#! /bin/sh
+#! /bin/bash
 
 set -e
 
-function init() {
-    mkdir -p /var/lib/mysql/data
-    chown -R mysql:mysql /var/lib/mysql
-    chmod 755 -R /var/lib/mysql
-    mariadb-install-db
+mkdir -p /run/mysqld
+chown -R mysql /run/mysqld/
+chown -R mysql /var/lib/mysql
 
-    mariadbd --skip-grant-tables --skip-networking&
+mariadbd --skip-networking &
 
-    until mysqladmin ping --silent; do
-        echo "=> Waiting for mariadb to stop..."
-        sleep 1
-    done
+until mariadb-admin -u root -p$DB_ROOT_PASSWORD ping --silent; do
+    echo ">>>> Waiting for MariaDB to start..."
+    sleep 1
+done
 
-mysql <<-EOF
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
-    DROP USER IF EXISTS 'root'@'%';
+mariadb -u root -p$DB_ROOT_PASSWORD <<-EOF
+DELETE FROM mysql.user WHERE User='';
 
-    CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
+ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED BY '$DB_ROOT_PASSWORD';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
 
-    CREATE USER IF NOT EXISTS '$MYSQL_USERNAME'@'localhost' IDENTIFIED BY '$MYSQL_PASSWORD';
-    CREATE USER IF NOT EXISTS '$MYSQL_USERNAME'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+CREATE USER IF NOT EXISTS '$DB_USERNAME'@'localhost' IDENTIFIED BY '$DB_PASSWORD';
+CREATE USER IF NOT EXISTS '$DB_USERNAME'@'%' IDENTIFIED BY '$DB_PASSWORD';
 
-    GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USERNAME'@'localhost';
-    GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USERNAME'@'%';
+CREATE DATABASE IF NOT EXISTS $DB_DATABASE;
 
-    FLUSH PRIVILEGES;
+GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USERNAME'@'localhost';
+GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USERNAME'@'%';
+
+FLUSH PRIVILEGES;
 EOF
-    
-    echo "=> Shutting Down Mariadb"
 
-    killall -TERM mariadbd
-    wait $(pidof mariadbd)
-}
+kill $(cat /run/mysqld/mysqld.pid)
+wait $(cat /run/mysqld/mysqld.pid)
 
-if [ ! -d /var/lib/mysql/data ]; then
-    init
-fi
-
-echo "=> Starting the mariadb server"
-
-exec mariadbd
+exec mariadbd --bind-address=0.0.0.0
