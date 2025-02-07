@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 until mariadb-admin ping -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD --silent; do
     echo ">>> Waiting for MariaDB to be ready..."
