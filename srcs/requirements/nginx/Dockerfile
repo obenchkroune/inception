@@ -14,4 +14,3 @@ RUN mkdir -p /var/obenchkr.42.fr/logs && \
 ENTRYPOINT [ "nginx-entrypoint.sh" ]
 
 CMD [ "nginx", "-g", "daemon off;" ]
-
