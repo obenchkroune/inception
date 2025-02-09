@@ -2,7 +2,7 @@
 
 set -e
 
-echo ">>> Waiting for MariaDB to start..."
+echo "⌚ Waiting for MariaDB to start..."
 until mariadb-admin ping -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD --silent --skip-ssl > /dev/null 2>&1; do
     sleep 1
 done
@@ -36,5 +36,5 @@ fi
 
 wp plugin update --all
 
-echo "Wordpress Up and running!"
+echo "🚀 Wordpress up and running!"
 exec "$@"

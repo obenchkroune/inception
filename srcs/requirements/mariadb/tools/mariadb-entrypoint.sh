@@ -4,8 +4,8 @@ set -e
 
 mariadbd --skip-networking &
 
+echo "⌚ Waiting for MariaDB to start..."
 until mariadb-admin -u root -p$DB_ROOT_PASSWORD ping --silent > /dev/null 2>&1; do
-    echo ">>> Waiting for MariaDB to start..."
     sleep 1
 done
 
