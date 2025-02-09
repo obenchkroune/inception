@@ -39,6 +39,15 @@ networks:
   inception:
 
 volumes:
-  # TODO: bind the volumes to /home/obenchkr
   db:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/obenchkr/data/db
+      o: bind
   web:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/obenchkr/data/web
+      o: bind

@@ -1,14 +1,14 @@
-#!/bin/bash
+#!/bin/sh
 
-until mariadb-admin ping -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD --silent > /dev/null 2>&1; do
-    echo ">>> Waiting for MariaDB to start..."
+set -e
+
+echo ">>> Waiting for MariaDB to start..."
+until mariadb-admin ping -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD --silent --skip-ssl > /dev/null 2>&1; do
     sleep 1
 done
 
-{
-wp core download --allow-root --path=/var/www/wordpress 
 
-cd /var/www/wordpress
+if ! wp core is-installed --allow-root; then
 
 wp config create \
     --allow-root \
@@ -32,8 +32,9 @@ wp user create \
     --user_pass="$WP_USER_PASSWORD" \
     --porcelain
 
+fi
+
 wp plugin update --all
-} 2>/dev/null
 
 echo "Wordpress Up and running!"
 exec "$@"

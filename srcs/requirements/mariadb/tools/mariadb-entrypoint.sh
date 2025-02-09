@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
@@ -9,7 +9,7 @@ until mariadb-admin -u root -p$DB_ROOT_PASSWORD ping --silent > /dev/null 2>&1; 
     sleep 1
 done
 
-mariadb -u root -p$DB_ROOT_PASSWORD <<-EOF
+mariadb -u root -p$DB_ROOT_PASSWORD <<EOF
 DELETE FROM mysql.user WHERE User='';
 
 ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED BY '$DB_ROOT_PASSWORD';
@@ -26,7 +26,9 @@ GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USERNAME'@'%';
 FLUSH PRIVILEGES;
 EOF
 
-kill $(cat /run/mysqld/mysqld.pid)
-wait $(cat /run/mysqld/mysqld.pid)
+MARIADB_PID="$(pidof mariadbd)"
+
+kill $MARIADB_PID
+wait $MARIADB_PID
 
 exec "$@"

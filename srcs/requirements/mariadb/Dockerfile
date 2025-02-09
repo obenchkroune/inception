@@ -1,16 +1,20 @@
-FROM debian:bullseye
+FROM alpine:3.21
 
-RUN apt update && apt install -y mariadb-server mariadb-client
+RUN apk update && apk add mariadb mariadb-client
+
+COPY ./conf/mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf
 
 COPY ./tools/mariadb-entrypoint.sh /usr/local/bin/mariadb-entrypoint.sh
 
-RUN chmod +x /usr/local/bin/mariadb-entrypoint.sh && \
-    mkdir -p /run/mysqld && \
-    chown -R mysql /run/mysqld/ && \
-    chown -R mysql /var/lib/mysql
+RUN chmod +x /usr/local/bin/mariadb-entrypoint.sh
+
+RUN mkdir -p /run/mysqld /var/lib/mysql && \
+    chown -R mysql:mysql /run/mysqld /var/lib/mysql
+
+RUN mariadb-install-db --user=mysql --datadir=/var/lib/mysql
 
 VOLUME [ "/var/lib/mysql" ]
 
 ENTRYPOINT [ "mariadb-entrypoint.sh" ]
 
-CMD [ "mariadbd", "--bind-address=0.0.0.0" ]
+CMD [ "mariadbd", "--datadir=/var/lib/mysql", "--user=mysql", "--bind-address=0.0.0.0" ]
