@@ -1,2 +1,6 @@
 # README.md
 **/.env
+
+# certifates and keys
+**/*.crt
+**/*.key
