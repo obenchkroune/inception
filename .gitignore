@@ -4,3 +4,4 @@
 # certifates and keys
 **/*.crt
 **/*.key
+**/*.csr
