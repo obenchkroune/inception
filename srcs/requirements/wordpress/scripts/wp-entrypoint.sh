@@ -3,7 +3,7 @@
 set -e
 
 echo "⌚ Waiting for MariaDB to start..."
-until mariadb-admin ping -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD --silent --skip-ssl > /dev/null 2>&1; do
+until nc -z $DB_HOST 3306 > /dev/null 2>&1; do
     sleep 1
 done
 

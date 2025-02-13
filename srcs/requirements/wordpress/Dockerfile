@@ -2,7 +2,7 @@ FROM alpine:3.21
 
 RUN apk update && apk add curl php \
     php-fpm php-phar php-pdo php-xml php-mbstring \
-    php-mysqli php-curl mariadb-client
+    php-mysqli php-curl netcat-openbsd
 
 WORKDIR /var/www/wordpress
 
