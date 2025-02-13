@@ -1,11 +1,11 @@
-DCFLAGS	:=	-f ./srcs/docker-compose.yml
+DOCKER_COMPOSE_PATH := ./srcs/docker-compose.yml
 
 up:
 	mkdir -p /home/obenchkr/data/web /home/obenchkr/data/db
-	docker compose $(DCFLAGS) up --build -d
+	docker compose -f $(DOCKER_COMPOSE_PATH) up --build -d
 
 down:
-	docker compose $(DCFLAGS) down
+	docker compose -f $(DOCKER_COMPOSE_PATH) down
 
 clean: down
 	@(docker stop $(shell docker ps -qa); docker rm $(shell docker ps -qa); docker rmi -f $(shell docker images -qa); docker volume rm $(shell docker volume ls -q); docker network rm $(shell docker network ls -q); exit 0) 2>/dev/null
