@@ -2,6 +2,12 @@
 
 set -e
 
+if [ -z "$DB_ROOT_PASSWORD" ] || [ -z "$DB_DATABASE" ] || [ -z "$DB_USERNAME" ] || [ -z "$DB_PASSWORD" ];
+then
+    echo "Missing required environment variables"
+    exit 1
+fi
+
 mariadbd --skip-networking &
 
 echo "⌚ Waiting for MariaDB to start..."
