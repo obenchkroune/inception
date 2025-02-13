@@ -13,7 +13,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 RUN sed -i 's/^listen = .*/listen = 9000/g' /etc/php83/php-fpm.d/www.conf
 
 
-RUN wp core download --allow-root
+RUN php -d memory_limit=512M "$(which wp)" core download --allow-root
 
 COPY ./tools/wp-entrypoint.sh /usr/local/bin/wp-entrypoint.sh
 RUN chmod +x /usr/local/bin/wp-entrypoint.sh
