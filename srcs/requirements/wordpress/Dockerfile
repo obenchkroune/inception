@@ -15,7 +15,7 @@ RUN sed -i 's/^listen = .*/listen = 9000/g' /etc/php83/php-fpm.d/www.conf
 
 RUN php -d memory_limit=512M "$(which wp)" core download --allow-root
 
-COPY ./tools/wp-entrypoint.sh /usr/local/bin/wp-entrypoint.sh
+COPY ./scripts/wp-entrypoint.sh /usr/local/bin/wp-entrypoint.sh
 RUN chmod +x /usr/local/bin/wp-entrypoint.sh
 
 VOLUME [ "/var/www/wordpress" ]

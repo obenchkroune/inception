@@ -4,7 +4,7 @@ RUN apk update && apk add mariadb mariadb-client
 
 COPY ./conf/mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf
 
-COPY ./tools/mariadb-entrypoint.sh /usr/local/bin/mariadb-entrypoint.sh
+COPY ./scripts/mariadb-entrypoint.sh /usr/local/bin/mariadb-entrypoint.sh
 
 RUN chmod +x /usr/local/bin/mariadb-entrypoint.sh
 
