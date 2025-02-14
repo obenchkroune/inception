@@ -49,6 +49,15 @@ services:
       - inception
     volumes:
       - redis:/var/lib/redis:rw
+  adminer:
+    container_name: adminer
+    build: ./requirements/bonus/adminer
+    image: adminer
+    restart: always
+    env_file:
+      - ./.env
+    networks:
+      - inception
 networks:
   inception:
 
