@@ -2,7 +2,7 @@
 
 set -e
 
-if [ -z "$DB_ROOT_PASSWORD" ] || [ -z "$DB_DATABASE" ] || [ -z "$DB_USERNAME" ] || [ -z "$DB_PASSWORD" ];
+if [ -z "$DB_ROOT_PWD" ] || [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PWD" ];
 then
     echo "Missing required environment variables"
     exit 1
@@ -11,23 +11,23 @@ fi
 mariadbd --skip-networking &
 
 echo "⌚ Waiting for MariaDB to start..."
-until mariadb-admin -u root -p$DB_ROOT_PASSWORD ping --silent > /dev/null 2>&1; do
+until mariadb-admin -u root -p$DB_ROOT_PWD ping --silent > /dev/null 2>&1; do
     sleep 1
 done
 
-mariadb -u root -p$DB_ROOT_PASSWORD <<EOF
+mariadb -u root -p$DB_ROOT_PWD <<EOF
 DELETE FROM mysql.user WHERE User='';
 
-ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED BY '$DB_ROOT_PASSWORD';
+ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED BY '$DB_ROOT_PWD';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
 
-CREATE USER IF NOT EXISTS '$DB_USERNAME'@'localhost' IDENTIFIED BY '$DB_PASSWORD';
-CREATE USER IF NOT EXISTS '$DB_USERNAME'@'%' IDENTIFIED BY '$DB_PASSWORD';
+CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PWD';
+CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_PWD';
 
-CREATE DATABASE IF NOT EXISTS $DB_DATABASE;
+CREATE DATABASE IF NOT EXISTS $DB_NAME;
 
-GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USERNAME'@'localhost';
-GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USERNAME'@'%';
+GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost';
+GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';
 
 FLUSH PRIVILEGES;
 EOF

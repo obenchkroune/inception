@@ -1,7 +1,7 @@
 DOCKER_COMPOSE_PATH := ./srcs/docker-compose.yml
 
 up:
-	mkdir -p /home/obenchkr/data/web /home/obenchkr/data/db
+	mkdir -p $(addprefix /home/obenchkr/data/, web db redis)
 	docker compose -f $(DOCKER_COMPOSE_PATH) up --build -d
 
 down:

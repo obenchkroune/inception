@@ -2,17 +2,17 @@
 
 set -e
 
-if [ -z "$DB_HOST" ] || [ -z "$DB_DATABASE" ] || [ -z "$DB_USERNAME" ] || [ -z "$DB_PASSWORD" ] || \
-    [ -z "$WP_SITE_URI" ] || [ -z "$WP_SITE_TITLE" ] || [ -z "$WP_ADMIN_USERNAME" ] || \
-    [ -z "$WP_ADMIN_PASSWORD" ] || [ -z "$WP_ADMIN_EMAIL" ] || [ -z "$WP_USER_USERNAME" ] || \
-    [ -z "$WP_USER_EMAIL" ] || [ -z "$WP_USER_PASSWORD" ];
+if [ -z "$DB_HOST" ] || [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PWD" ] || \
+    [ -z "$WP_URL" ] || [ -z "$WP_TITLE" ] || [ -z "$WP_ADMIN_USER" ] || \
+    [ -z "$WP_ADMIN_PWD" ] || [ -z "$WP_ADMIN_EMAIL" ] || [ -z "$WP_USER" ] || \
+    [ -z "$WP_EMAIL" ] || [ -z "$WP_PWD" ];
 then
     echo "Missing required environment variables"
     exit 1
 fi
 
-echo "⌚ Waiting for MariaDB to start..."
-until nc -z $DB_HOST 3306 > /dev/null 2>&1; do
+echo "⌚ Waiting for MariaDB/Redis to start..."
+until nc -z $DB_HOST 3306 && nc -z $REDIS_HOST 6379; do
     sleep 1
 done
 
@@ -21,29 +21,36 @@ if ! wp core is-installed --allow-root; then
 
 wp config create \
     --allow-root \
-    --dbname=$DB_DATABASE \
-    --dbuser=$DB_USERNAME \
-    --dbpass=$DB_PASSWORD \
+    --dbname=$DB_NAME \
+    --dbuser=$DB_USER \
+    --dbpass=$DB_PWD \
     --dbhost=$DB_HOST
 
 wp core install \
     --allow-root \
-    --url="$WP_SITE_URI" \
-    --title="$WP_SITE_TITLE" \
-    --admin_user="$WP_ADMIN_USERNAME" \
-    --admin_password="$WP_ADMIN_PASSWORD" \
+    --url="$WP_URL" \
+    --title="$WP_TITLE" \
+    --admin_user="$WP_ADMIN_USER" \
+    --admin_password="$WP_ADMIN_PWD" \
     --admin_email="$WP_ADMIN_EMAIL"
 
 wp user create \
     --allow-root \
-    "$WP_USER_USERNAME" \
-    "$WP_USER_EMAIL" \
-    --user_pass="$WP_USER_PASSWORD" \
+    "$WP_USER" \
+    "$WP_EMAIL" \
+    --user_pass="$WP_PWD" \
     --porcelain
+
+wp plugin install redis-cache \
+    --allow-root --activate
+
+wp config set WP_REDIS_HOST $REDIS_HOST
+wp config set WP_REDIS_PASSWORD $REDIS_PWD
 
 fi
 
-wp plugin update --all
+wp core update
+wp redis enable
 
 echo "🚀 Wordpress up and running!"
 exec "$@"

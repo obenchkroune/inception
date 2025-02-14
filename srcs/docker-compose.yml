@@ -38,6 +38,17 @@ services:
       - mariadb
     volumes:
       - web:/var/www/wordpress:rw
+  redis:
+    container_name: redis
+    build: ./requirements/bonus/redis
+    image: redis
+    restart: always
+    env_file:
+      - ./.env
+    networks:
+      - inception
+    volumes:
+      - redis:/var/lib/redis:rw
 networks:
   inception:
 
@@ -53,4 +64,10 @@ volumes:
     driver_opts:
       type: none
       device: /home/obenchkr/data/web
+      o: rbind
+  redis:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/obenchkr/data/redis
       o: rbind

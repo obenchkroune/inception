@@ -2,7 +2,7 @@ FROM alpine:3.21
 
 RUN apk update && apk add curl php \
     php-fpm php-phar php-pdo php-xml php-mbstring \
-    php-mysqli php-curl netcat-openbsd
+    php-mysqli php-curl php-redis php-tokenizer php-ctype netcat-openbsd
 
 WORKDIR /var/www/wordpress
 
@@ -10,8 +10,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     chmod +x wp-cli.phar && \ 
     mv wp-cli.phar /usr/local/bin/wp
     
-RUN sed -i 's/^listen = .*/listen = 9000/g' /etc/php83/php-fpm.d/www.conf
-
+RUN sed -i -E 's/^[[:space:]]*;?[[:space:]]*listen = .*/listen = 9000/g' /etc/php83/php-fpm.d/www.conf
 
 RUN php -d memory_limit=512M "$(which wp)" core download --allow-root
 
