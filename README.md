@@ -2,3 +2,4 @@
 
 - [ ] look into the bonus part :D
 - [ ] test the openssl certificate check
+- [ ] run the services as non-root user

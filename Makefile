@@ -1,7 +1,7 @@
 DOCKER_COMPOSE_PATH := ./srcs/docker-compose.yml
 
 up:
-	mkdir -p $(addprefix /home/obenchkr/data/, wordpress mariadb redis)
+	mkdir -p $(addprefix /home/obenchkr/data/, wordpress mariadb redis adminer)
 	docker compose -f $(DOCKER_COMPOSE_PATH) up --build -d
 
 down:

@@ -1,6 +1,6 @@
 FROM alpine:3.21
 
-RUN apk update && apk add redis
+RUN apk update && apk add --no-cache redis
 
 COPY ./scripts/redis-entrypoint.sh /usr/local/bin/redis-entrypoint.sh
 

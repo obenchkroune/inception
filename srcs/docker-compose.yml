@@ -12,6 +12,7 @@ services:
       - "443:443"
     volumes:
       - wordpress:/var/www/wordpress:ro
+      - adminer:/var/www/adminer:ro
     depends_on:
       - wordpress
   mariadb:
@@ -58,6 +59,8 @@ services:
       - ./.env
     networks:
       - inception
+    volumes:
+      - adminer:/var/www/adminer:rw
 networks:
   inception:
 
@@ -79,4 +82,10 @@ volumes:
     driver_opts:
       type: none
       device: /home/obenchkr/data/redis
+      o: rbind
+  adminer:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/obenchkr/data/adminer
       o: rbind
