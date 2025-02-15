@@ -2,6 +2,12 @@
 
 set -e
 
+if [ -z "$FTP_USER" ] || [ -z "$FTP_PWD" ] || [ -z "$CERT_SUBJECT" ];
+then
+    echo "Missing required environment variables"
+    exit 1
+fi
+
 if ! id -u $FTP_USER > /dev/null; then
     adduser -D -h /var/www/wordpress $FTP_USER
 fi
