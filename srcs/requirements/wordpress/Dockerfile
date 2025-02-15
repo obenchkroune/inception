@@ -2,7 +2,8 @@ FROM alpine:3.21
 
 RUN apk update && apk add --no-cache curl php \
     php-fpm php-phar php-pdo php-xml php-mbstring \
-    php-mysqli php-curl php-redis php-tokenizer php-ctype netcat-openbsd
+    php-mysqli php-curl php-redis php-tokenizer \
+    php-ctype php-ftp netcat-openbsd
 
 WORKDIR /var/www/wordpress
 
