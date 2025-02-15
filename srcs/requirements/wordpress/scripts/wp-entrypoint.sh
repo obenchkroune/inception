@@ -2,10 +2,10 @@
 
 set -e
 
-if [ -z "$DB_HOST" ] || [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PWD" ] || \
+if [ -z "$DB_HOST" ] || [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ] || \
     [ -z "$WP_URL" ] || [ -z "$WP_TITLE" ] || [ -z "$WP_ADMIN_USER" ] || \
-    [ -z "$WP_ADMIN_PWD" ] || [ -z "$WP_ADMIN_EMAIL" ] || [ -z "$WP_USER" ] || \
-    [ -z "$WP_EMAIL" ] || [ -z "$WP_PWD" ];
+    [ -z "$WP_ADMIN_PASS" ] || [ -z "$WP_ADMIN_MAIL" ] || [ -z "$WP_USER" ] || \
+    [ -z "$WP_MAIL" ] || [ -z "$WP_PASS" ];
 then
     echo "Missing required environment variables"
     exit 1
@@ -24,7 +24,7 @@ wp config create \
     --allow-root \
     --dbname=$DB_NAME \
     --dbuser=$DB_USER \
-    --dbpass=$DB_PWD \
+    --dbpass=$DB_PASS \
     --dbhost=$DB_HOST
 
 wp core install \
@@ -32,14 +32,14 @@ wp core install \
     --url="$WP_URL" \
     --title="$WP_TITLE" \
     --admin_user="$WP_ADMIN_USER" \
-    --admin_password="$WP_ADMIN_PWD" \
-    --admin_email="$WP_ADMIN_EMAIL"
+    --admin_password="$WP_ADMIN_PASS" \
+    --admin_MAIL="$WP_ADMIN_MAIL"
 
 wp user create \
     --allow-root \
     "$WP_USER" \
-    "$WP_EMAIL" \
-    --user_pass="$WP_PWD" \
+    "$WP_MAIL" \
+    --user_pass="$WP_PASS" \
     --porcelain
 
 wp plugin install redis-cache \
@@ -48,10 +48,10 @@ wp plugin install redis-cache \
 fi
 
 wp config set WP_REDIS_HOST "$REDIS_HOST"
-wp config set WP_REDIS_PASSWORD "$REDIS_PWD"
+wp config set WP_REDIS_PASSWORD "$REDIS_PASS"
 wp config set FTP_HOST "$FTP_HOST"
 wp config set FTP_USER "$FTP_USER"
-wp config set FTP_PASS "$FTP_PWD"
+wp config set FTP_PASS "$FTP_PASS"
 wp config set FTP_SSL true --raw
 
 wp config set SMTP_HOST "mailhog"

@@ -95,6 +95,8 @@ services:
       - "8025:8025"
     networks:
       - inception
+    env_file:
+      - ./.env
 networks:
   inception:
 

@@ -2,7 +2,7 @@
 
 set -e
 
-if [ -z "$FTP_USER" ] || [ -z "$FTP_PWD" ] || [ -z "$CERT_SUBJECT" ];
+if [ -z "$FTP_USER" ] || [ -z "$FTP_PASS" ] || [ -z "$CERT_SUBJECT" ];
 then
     echo "Missing required environment variables"
     exit 1
@@ -13,8 +13,8 @@ if ! id -u $FTP_USER > /dev/null; then
 fi
 
 passwd $FTP_USER <<EOF > /dev/null
-$FTP_PWD
-$FTP_PWD
+$FTP_PASS
+$FTP_PASS
 EOF
 
 chown -R $FTP_USER /var/www/wordpress
