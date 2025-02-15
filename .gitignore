@@ -5,3 +5,7 @@
 **/*.crt
 **/*.key
 **/*.csr
+
+# nodejs
+**/node_modules
+**/npm-debug.log

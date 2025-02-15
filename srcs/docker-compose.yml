@@ -77,7 +77,22 @@ services:
     ports:
       - 20:20
       - 21:21
-      - 21000-21010:21000-21010
+  nextjs:
+    container_name: nextjs
+    build: ./requirements/bonus/nextjs
+    image: nextjs
+    restart: always
+    depends_on:
+      - nginx
+    networks:
+      - inception
+  # mailhog:
+  #   container_name: mailhog
+  #   image: mailhog/mailhog
+  #   restart: always
+  #   ports:
+  #     - "1025:1025"
+  #     - "8025:8025"
 networks:
   inception:
 
