@@ -3,15 +3,15 @@ FROM alpine:3.21
 RUN apk update && apk add --no-cache curl php \
     php-fpm php-phar php-pdo php-xml php-mbstring \
     php-mysqli php-curl php-redis php-tokenizer \
-    php-ctype php-ftp netcat-openbsd
+    php-ctype php-ftp php-zip netcat-openbsd
+
+COPY ./conf/www.conf /etc/php83/php-fpm.d/www.conf
 
 WORKDIR /var/www/wordpress
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \ 
     chmod +x wp-cli.phar && \ 
     mv wp-cli.phar /usr/local/bin/wp
-    
-RUN sed -i -E 's/^[[:space:]]*;?[[:space:]]*listen = .*/listen = 9000/g' /etc/php83/php-fpm.d/www.conf
 
 RUN php -d memory_limit=512M "$(which wp)" core download --allow-root
 

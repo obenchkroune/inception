@@ -1,19 +1,18 @@
 FROM alpine:3.21
 
-RUN apk update && apk add --no-cache vsftpd openssl
+RUN apk update && apk add --no-cache proftpd openssl proftpd-mod_tls
 
 COPY ./scripts/ftp-entrypoint.sh /usr/local/bin/ftp-entrypoint.sh
 
-COPY ./conf/vsftpd.conf /etc/vsftpd/vsftpd.conf
+COPY ./conf/proftpd.conf /etc/proftpd/proftpd.conf
 
 RUN chmod +x /usr/local/bin/ftp-entrypoint.sh
 
 EXPOSE 21
 EXPOSE 20
-EXPOSE 21000-21010
 
 VOLUME [ "/var/www/wordpress" ]
 
 ENTRYPOINT [ "ftp-entrypoint.sh" ]
 
-CMD [ "vsftpd", "/etc/vsftpd/vsftpd.conf" ]
+CMD [ "proftpd", "--nodaemon" ]
