@@ -47,14 +47,17 @@ wp plugin install redis-cache \
 
 fi
 
-wp config set WP_REDIS_HOST $REDIS_HOST
-wp config set WP_REDIS_PASSWORD $REDIS_PWD
-wp config set FTP_HOST $FTP_HOST
-wp config set FTP_USER $FTP_USER
-wp config set FTP_PASS $FTP_PWD
-wp config set SMTP_HOST mailhog
+wp config set WP_REDIS_HOST "$REDIS_HOST"
+wp config set WP_REDIS_PASSWORD "$REDIS_PWD"
+wp config set FTP_HOST "$FTP_HOST"
+wp config set FTP_USER "$FTP_USER"
+wp config set FTP_PASS "$FTP_PWD"
+wp config set FTP_SSL true --raw
+
+wp config set SMTP_HOST "mailhog"
 wp config set SMTP_PORT 1025 --raw
-wp config set SMTP_AUTH "false" --raw
+wp config set SMTP_AUTH false --raw
+wp config set SMTP_SECURE ''
 
 wp core update
 wp redis enable
