@@ -1,5 +1,4 @@
 # TODOs:
 
-- [ ] look into the bonus part :D
-- [ ] test the openssl certificate check
-- [ ] generate self-signed certificate for the ftp server
+- [ ] add a simple NextJS application and serve it using NGINX
+- [ ] setup a mailhog serivce
