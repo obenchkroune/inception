@@ -9,8 +9,6 @@ COPY ./scripts/mailhog-entrypoint.sh /usr/local/bin/mailhog-entrypoint.sh
 
 RUN chmod +x /usr/local/bin/mailhog-entrypoint.sh
     
-EXPOSE 8025
-    
 ENTRYPOINT [ "mailhog-entrypoint.sh" ]
 
 CMD [ "MailHog", "-auth-file=./.auth" ]

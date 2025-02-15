@@ -91,8 +91,6 @@ services:
     build: ./requirements/bonus/mailhog
     image: mailhog
     restart: always
-    ports:
-      - "8025:8025"
     networks:
       - inception
     env_file:
