@@ -86,13 +86,15 @@ services:
       - nginx
     networks:
       - inception
-  # mailhog:
-  #   container_name: mailhog
-  #   image: mailhog/mailhog
-  #   restart: always
-  #   ports:
-  #     - "1025:1025"
-  #     - "8025:8025"
+  mailhog:
+    container_name: mailhog
+    build: ./requirements/bonus/mailhog
+    image: mailhog
+    restart: always
+    ports:
+      - "8025:8025"
+    networks:
+      - inception
 networks:
   inception:
 

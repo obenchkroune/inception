@@ -16,6 +16,7 @@ until nc -z $DB_HOST 3306 && nc -z $REDIS_HOST 6379; do
     sleep 1
 done
 
+chmod -R 777 ./wp-content
 
 if ! wp core is-installed --allow-root; then
 
@@ -51,6 +52,9 @@ wp config set WP_REDIS_PASSWORD $REDIS_PWD
 wp config set FTP_HOST $FTP_HOST
 wp config set FTP_USER $FTP_USER
 wp config set FTP_PASS $FTP_PWD
+wp config set SMTP_HOST mailhog
+wp config set SMTP_PORT 1025 --raw
+wp config set SMTP_AUTH "false" --raw
 
 wp core update
 wp redis enable

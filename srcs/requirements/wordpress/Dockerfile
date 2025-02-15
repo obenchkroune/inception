@@ -6,6 +6,7 @@ RUN apk update && apk add --no-cache curl php \
     php-ctype php-ftp php-zip netcat-openbsd
 
 COPY ./conf/www.conf /etc/php83/php-fpm.d/www.conf
+COPY ./conf/php.ini /etc/php83/php.ini
 
 WORKDIR /var/www/wordpress
 
